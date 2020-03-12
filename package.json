@@ -1,0 +1,22 @@
+{
+  "name": "cordova-plugin-flutter",
+  "version": "0.0.1",
+  "description": "cordova-plugin-flutter",
+  "cordova": {
+    "id": "cordova-plugin-flutter"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waitaction/cordova-plugin-flutter.git"
+  },
+  "keywords": [
+    "cordova-plugin-flutter",
+    "cordova",
+    "cordova-android"
+  ],
+  "author": "qijing chen",
+  "license": "Apache License Version 2.0",
+  "peerDependencies": {
+
+  }
+}

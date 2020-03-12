@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-flutter" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova-plugin-flutter</name>
+    <description>Cordova cordova-plugin-flutter Plugin</description>
+    <author>350561378@qq.com</author>
+    <license>Apache License Version 2.0</license>
+    <keywords>cordova,cordova-plugin-flutter</keywords>
+    <engines>
+        <engine name="cordova-android" version="&gt;=8.0.0"/>
+    </engines>
+    <js-module name="CordovaFlutter" src="www/cordova-plugin-flutter.js">
+        <clobbers target="flutter"/>
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="CordovaFlutter">
+                <param name="android-package" value="com.flutter.android.FlutterCordovaPlugin"/>
+            </feature>
+        </config-file>
+        <config-file parent="/manifest/application" target="AndroidManifest.xml">
+            <activity android:name="io.flutter.embedding.android.FlutterActivity" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize"/>
+        </config-file>
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+        </config-file>
+        <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android"/>
+        <framework src="src/android/compile.gradle" custom="true" type="gradleReference"/>
+        <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js"/>
+        <hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js"/>
+    </platform>
+</plugin>
