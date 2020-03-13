@@ -1,12 +1,12 @@
 var exec = require('cordova/exec');
 var Flutter = function () { }
- 
-Flutter.prototype.initFlutter = function (opt,success,error){
-    exec(success, error, "CordovaFlutter", "initFlutter", [opt]);
+
+Flutter.prototype.init = function (success, error) {
+    exec(success, error, "CordovaFlutter", "init", []);
 }
 
-Flutter.prototype.openFlutterPage = function (opt, success, error) {
-    exec(success, error, "CordovaFlutter", "openFlutterPage", [opt]);
+Flutter.prototype.openPage = function (success, error) {
+    exec(success, error, "CordovaFlutter", "openPage", []);
 }
 
 module.exports = new Flutter();

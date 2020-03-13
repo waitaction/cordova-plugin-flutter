@@ -42,3 +42,24 @@ cordova build android
 ```
 
 > 编译过程中会下载jar包，请耐心等待
+
+## 如何调用flutter
+
+**flutter.init** `使用前初始化`
+
+``` javascript
+flutter.init(function(){
+    alert("初始化成功");
+},function(err){
+
+})
+```
+
+**flutter.openPage** `调用flutter (必须在flutter.init初始化之后执行)`
+``` javascript
+flutter.openPage(function(){
+    alert("调用flutter成功");
+},function(err){
+
+})
+```
