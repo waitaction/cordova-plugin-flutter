@@ -5,8 +5,8 @@ Flutter.prototype.init = function (success, error) {
     exec(success, error, "CordovaFlutter", "init", []);
 }
 
-Flutter.prototype.openPage = function (success, error) {
-    exec(success, error, "CordovaFlutter", "openPage", []);
+Flutter.prototype.open = function (success, error) {
+    exec(success, error, "CordovaFlutter", "open", []);
 }
 
 module.exports = new Flutter();

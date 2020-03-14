@@ -45,7 +45,7 @@ cordova build android
 
 ## 如何调用flutter
 
-**flutter.init** `使用前初始化`
+**flutter.init** `使用前初始化,尽可能早的初始化，且只初始一次`
 
 ``` javascript
 flutter.init(function(){
@@ -63,3 +63,10 @@ flutter.openPage(function(){
 
 })
 ```
+
+
+## 进度
+
+* 正在开发flutter调用cordova javascript的功能
+* 正在开发允许flutter宿主，cordova为辅助的功能
+* 正在开发ios flutter

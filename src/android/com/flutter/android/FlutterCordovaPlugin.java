@@ -37,7 +37,7 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
         if (action.equals("init")) {
             //JSONObject jsObj = args.getJSONObject(0);
             //this.engineId = jsObj.getString("engineId");
-            this.engineId = "d785461d-7d1f-44e1-8d5c-cee5980e7dca";
+            this.engineId = "d785461d";
             this.cordova.getActivity().runOnUiThread(
                     new Runnable() {
                         @Override
@@ -74,7 +74,7 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
             return true;
         }
 
-        if (action.equals("openPage")) {
+        if (action.equals("open")) {
             try {
                 this.cordova.getActivity().startActivity(
                         FlutterActivity.withCachedEngine(this.engineId).build(this.cordova.getActivity())
