@@ -13,26 +13,13 @@
 
 ## 安装
 
-1.先确认你的cordova项目已添加android平台
-
-``` shell
-cordova platform add android
-```
-
-2.然后在你的cordova项目中创建flutter模块
-
-``` shell
-flutter create -t module flutter_module
-```
-
-> 不要去修改flutter_module文件夹名称
-
-3.然后安装cordova-plugin-flutter插件
+安装cordova-plugin-flutter插件
 
 ``` shell
 cordova plugin add cordova-plugin-flutter
 ```
 
+> 安装完之后会产生`flutter_module`文件夹，不要去修改flutter_module文件夹名称
 > 安装过程可能会卡住，等一小会就正常
 
 4.编译android
@@ -43,30 +30,50 @@ cordova build android
 
 > 编译过程中会下载jar包，请耐心等待
 
-## 如何调用flutter
+## 调用flutter
 
-**flutter.init** `使用前初始化,尽可能早的初始化，且只初始一次`
+**flutter.init** `使用前初始化，尽可能早的初始化，且只初始一次`
 
 ``` javascript
 flutter.init(function(){
-    alert("初始化成功");
+    console.log("初始化成功");
 },function(err){
 
 })
 ```
 
-**flutter.openPage** `调用flutter (必须在flutter.init初始化之后执行)`
+下面的方法都要在`flutter.init`之后才能调用
+
+**flutter.open** `打开flutter`
 ``` javascript
-flutter.openPage(function(){
-    alert("调用flutter成功");
+flutter.open(function(){
+    console.log("打开flutter成功");
 },function(err){
 
 })
 ```
 
+## `flutter`调用`cordova`的js方法
 
-## 进度
+先在`cordova`定义方法
+``` javascript
+window.bridgeFlutter.getDate = function (jsonObj, callback) {
+    var format = jsonObj.format;
+    callback({
+        date: "日期格式是：" + format
+    });
+}
+```
 
-* 正在开发flutter调用cordova javascript的功能
-* 正在开发允许flutter宿主，cordova为辅助的功能
-* 正在开发ios flutter
+然后在`flutter`调用
+``` dart
+import 'package:flutter_module/cordova.dart';
+
+//在需要的地方调用
+var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM月dd日"});
+```
+
+
+## 其它功能
+
+开发中...
