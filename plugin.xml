@@ -26,7 +26,9 @@
         </config-file>
         <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android"/>
         <framework src="src/android/compile.gradle" custom="true" type="gradleReference"/>
+       
         <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js"/>
         <hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js"/>
+        <hook type="after_plugin_add" src="scripts/android/after_plugin_add.js" />
     </platform>
 </plugin>

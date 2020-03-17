@@ -16,6 +16,7 @@ function removeFlutterFromBuilderJsFile() {
     data = data.replace(/\/\/#CORDOVA-PLUGIN-FLUTTER#START[\s\S]*?\/\/#CORDOVA-PLUGIN-FLUTTER#END/ig, "");
     fs.writeFileSync(projectBuilderJsPath, data, 'utf8');
 }
-
+console.log("*** 移除 platforms/android/cordova/lib/builders/ProjectBuilder.js 与flutter相关的脚本 ***");
 removeFlutterFromBuilderJsFile();
+console.log("*** 移除 platforms/android/gradle.properties 与flutter相关的设置 ***");
 removeFromGradlePropertiesJsFile();
