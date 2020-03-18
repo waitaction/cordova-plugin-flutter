@@ -93,6 +93,7 @@ function installFlutterModule() {
                     console.log('exec error: ' + error);
                 }
                 console.log(stdout);
+                copyFlutterCordovaFile();
             }
         );
     }
@@ -112,7 +113,7 @@ function installFlutterModule() {
         }
     }
 
-    copyFlutterCordovaFile();
+
 
 }
 

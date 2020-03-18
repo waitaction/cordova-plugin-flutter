@@ -16,7 +16,11 @@ Flutter.prototype.invokeCallback = function (callbackData, uuidMethod, success, 
     };
     exec(success, error, "CordovaFlutter", "invokeCallback", [result]);
 }
-window.bridgeFlutter = {};
+
+if (window.bridgeFlutter == null) {
+    window.bridgeFlutter = {};
+}
+
 window.bridgeFlutterInvoke = function (uuid, methodName, args) {
     if (window.bridgeFlutter[methodName] == null) {
         this.alert("window.bridgeFlutter." + methodName + " 方法不存在");
