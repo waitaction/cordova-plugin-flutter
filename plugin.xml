@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-flutter" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-flutter" version="1.0.0" 
+    xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-flutter</name>
     <description>Cordova cordova-plugin-flutter Plugin</description>
     <author>350561378@qq.com</author>
@@ -26,9 +28,25 @@
         </config-file>
         <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android"/>
         <framework src="src/android/compile.gradle" custom="true" type="gradleReference"/>
-       
+
         <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js"/>
         <hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js"/>
         <hook type="after_plugin_add" src="scripts/android/after_plugin_add.js" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CordovaFlutter">
+                <param name="ios-package" value="CDVFlutter"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/CDVFlutter.h"/>
+        <source-file src="src/ios/CDVFlutter.m"/>
+        <framework src="src/ios/lib/App.framework" custom="true" />
+        <framework src="src/ios/lib/Flutter.framework" custom="true"/>
+        <hook type="before_plugin_install" src="scripts/ios/before_plugin_install.js"/>
+        <hook type="before_plugin_uninstall" src="scripts/ios/before_plugin_uninstall.js"/>
+        <hook type="after_plugin_add" src="scripts/ios/after_plugin_add.js" />
+        <hook type="before_prepare" src="scripts/ios/before_prepare.js" />
     </platform>
 </plugin>
