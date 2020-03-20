@@ -5,28 +5,26 @@ function iOSFlutterFrameworkBuild() {
 
     if (fs.existsSync("flutter_module")) {
         console.info("\033[33m *** flutter build ios-framework *** \033[0m");
-        console.log("安装过程中可能需要几分钟的时间...");
-        //'cd flutter_module && flutter build ios-framework --output=../platforms/ios/${appName}/Plugins/cordova-plugin-flutter'
-        process.exec('cd flutter_module && flutter build ios-framework --output=ios-framework',
-            function (error, stdout, stderr) {
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
-                console.log(stdout);
-                copyiOSFlutterFramework();
-            }
-        );
+        console.log("编译过程可能需要几分钟的时间...");
+        process.execSync('cd flutter_module && flutter build ios-framework --output=ios-framework');
+ 
+        copyiOSFlutterFramework();
+
+
+
     }
 
     function copyiOSFlutterFramework() {
         try {
+            console.info("\033[33m *** copyiOSFlutterFramework *** \033[0m");
             var fs = require('fs');
             var configXmlPath = "config.xml";
             var configXml = fs.readFileSync(configXmlPath);
             var name = /<name>.*?<\/name>/.exec(configXml)[0];
             name = name.replace("<name>", "").replace("</name>", "");
-            var targetPath = "../platforms/ios/" + name + "/Plugins/cordova-plugin-flutter";
-            var path = "flutter_module/ios-framework";
+            var targetPath = "platforms/ios/" + name + "/Plugins/cordova-plugin-flutter";
+            var path = "flutter_module/ios-framework/Debug";
+            console.info("\033[33m *** name *** \033[0m");
             copy(path, targetPath);
         } catch (error) {
             console.info("\033[33m 报错： \033[0m");
@@ -38,6 +36,7 @@ function iOSFlutterFrameworkBuild() {
 
 
 function copy(src, dst) {
+    var fs = require('fs');
     let paths = fs.readdirSync(src); //同步读取当前目录
     paths.forEach(function (path) {
         var _src = src + '/' + path;
@@ -56,6 +55,7 @@ function copy(src, dst) {
     });
 }
 function checkDirectory(src, dst, callback) {
+    var fs = require('fs');
     fs.access(dst, fs.constants.F_OK, (err) => {
         if (err) {
             fs.mkdirSync(dst);
