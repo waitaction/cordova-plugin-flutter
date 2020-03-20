@@ -1,6 +1,5 @@
-
-
 #import "CDVFlutter.h"
+@import <FlutterPluginRegistrant/GeneratedPluginRegistrant.h>
 
 @implementation CDVFlutter
 
@@ -10,6 +9,9 @@
 }
 
 -(void)init:(CDVInvokedUrlCommand *)command {
+    self.flutterEngine =[[FlutterEngine alloc] initWithName:@"my flutter engine"];
+    [self.flutterEngine run];
+    [GeneratedPluginRegistrant registerWithRegistry:self.flutterEngine];
     // CDVPluginResult* result= nil;
     // NSArray* args=command.arguments;
     
