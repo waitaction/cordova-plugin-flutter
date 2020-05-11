@@ -77,11 +77,3 @@ var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM
 
 开发中...
 
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url "https://storage.googleapis.com/download.flutter.io" }
-    }
-}
