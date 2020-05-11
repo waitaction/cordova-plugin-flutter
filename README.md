@@ -1,14 +1,14 @@
 
 # cordova应用与flutter混合开发
 
-> 该插件开发中，目前暂时无法正常使用，请不要使用
+> 该插件开发中，目前暂时无法正常使用，请不要使用，暂时android可以使用
 
 让你的cordova应用能与flutter进行混合开发
 
 | 开发环境        | 版本      |
 | --------------- | --------- |
 | cordova         | ≥ 9.0.0   |
-| cordova-android | ≥ 8.0.0   |
+| cordova-android | = 8.0.0   |
 | flutter         | ≥ 1.12.13 |
 
 ## 安装
@@ -73,7 +73,15 @@ import 'package:flutter_module/cordova.dart';
 var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM月dd日"});
 ```
 
-
 ## 其它功能
 
 开发中...
+
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://storage.googleapis.com/download.flutter.io" }
+    }
+}

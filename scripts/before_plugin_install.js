@@ -4,7 +4,8 @@ function installFlutterModule() {
     var fs = require('fs');
     if (!fs.existsSync("flutter_module")) {
         console.info("\033[33m *** 安装Flutter模块 *** \033[0m")
-        var exportPath = "export PUB_HOSTED_URL=https://pub.flutter-io.cn && export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn && ";
+        var exportPath = "";
+        //var exportPath = "export PUB_HOSTED_URL=https://pub.flutter-io.cn && export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn && ";
         var result = process.execSync(exportPath + 'flutter create -t module flutter_module');
         var error = result[0];
         var stdout = result[1];

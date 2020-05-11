@@ -2,6 +2,7 @@
 var fs = require('fs');
 var projectBuilderJsPath = "platforms/android/cordova/lib/builders/ProjectBuilder.js"
 var gradleProperties = "platforms/android/gradle.properties";
+var buildGradleFilePath = "platforms/android/build.gradle";
 /**
  * 读取cordova项目 ProjectBuilder.js 的内容
  */
@@ -82,13 +83,31 @@ android.enableJetifier=true
     fs.writeFileSync(gradleProperties, data);
 }
 
+function updateToBuildGradle() {
+    var data = fs.readFileSync(buildGradleFilePath, 'utf8');
+    data = data.replace(
+        `allprojects {
+    repositories {
+        google()
+        jcenter()
+    }`,
+        `allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://storage.googleapis.com/download.flutter.io" }
+    }`);
+    fs.writeFileSync(buildGradleFilePath, data);
+}
 
 console.log("*** 注入 platforms/android/cordova/lib/builders/ProjectBuilder.js 与flutter相关的脚本 ***");
 writeFlutterSettingsGradleToBuilderJsFile();
 writeImplementationToBuilderJsFile();
 updateFlutterGradleToBuilderJsFile();
+
 console.log("*** 注入 platforms/android/gradle.properties 与flutter相关的设置 ***");
 updateToGradlePropertiesJsFile();
 
-
+console.log("*** 注入 platforms/android/build.gradle 与flutter相关的设置 ***");
+updateToBuildGradle();
 
