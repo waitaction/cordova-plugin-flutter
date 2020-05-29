@@ -2,6 +2,7 @@ package com.flutter.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -66,7 +68,6 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
                         // Start executing Dart code to pre-warm the FlutterEngine.
                         flutterEngine.getDartExecutor()
                                 .executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
-
                         // Cache the FlutterEngine to be used by FlutterActivity.
                         FlutterEngineCache.getInstance().put(engineId, flutterEngine);
 
@@ -123,7 +124,10 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
         if (action.equals("open")) {
             try {
                 this.cordova.getActivity().startActivity(
-                        FlutterActivity.withCachedEngine(this.engineId).build(this.cordova.getActivity()));
+                            FlutterActivity
+                                    .withCachedEngine(this.engineId)
+                                    .build(this.cordova.getActivity()));
+
                 callbackContext.success();
             } catch (Exception ex) {
                 callbackContext.error(ex.getMessage());
@@ -143,7 +147,8 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
                     public void run() {
                         MethodChannel.Result methodChannelResult = methodMap.get(uuidMethod);
                         if (rstList.size() > 0) {
-                            methodChannelResult.success(rstList.get(0));
+                            JSONArray jsonArray=new JSONArray(rstList);
+                            methodChannelResult.success(jsonArray.toString());
                         } else {
                             methodChannelResult.success(null);
                         }
