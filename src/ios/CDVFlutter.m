@@ -1,63 +1,111 @@
 #import "CDVFlutter.h"
-@import <FlutterPluginRegistrant/GeneratedPluginRegistrant.h>
+#import "GeneratedPluginRegistrant.h"
+#import <Flutter/Flutter.h>
+
 
 @implementation CDVFlutter
 
 -(void) pluginInitialize {
-    //NSString* appKey = [[self.commandDelegate settings] objectForKey:@"appkey"];
-    //[[BaiduMobStat defaultStat] startWithAppId:appKey]; 
+    NSLog(@"pluginInitialize");
 }
 
 -(void)init:(CDVInvokedUrlCommand *)command {
-    self.flutterEngine =[[FlutterEngine alloc] initWithName:@"my flutter engine"];
-    [self.flutterEngine run];
-    [GeneratedPluginRegistrant registerWithRegistry:self.flutterEngine];
-    // CDVPluginResult* result= nil;
-    // NSArray* args=command.arguments;
     
-    // if (args.count != 2) {
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"please pass event and label"];
-    // }
-    // else {
-    //     [[BaiduMobStat defaultStat] logEvent:[command argumentAtIndex:0] eventLabel:[command argumentAtIndex:1]];
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"success!"];
-    // }
+    CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
     
-    // [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    __weak CDVFlutter* weakSelf = self;
+    if(nil == weakSelf.flutterEngine){
+                  weakSelf.flutterEngine =[[FlutterEngine alloc] initWithName:@"my flutter engine"];
+                 [weakSelf.flutterEngine runWithEntrypoint:nil];
+                 [GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
+    }
+    
+    if(nil == self.methodDict){
+        self.methodDict = [NSMutableDictionary dictionary];
+    }
+    
+    [self.commandDelegate runInBackground:^{
+        
+        [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+    
 }
 
 -(void)open:(CDVInvokedUrlCommand*)command {
-    // CDVPluginResult* result= nil;
-    // NSArray* args=command.arguments;
     
-    // if (args.count != 3) {
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"please pass event and label with attributes"];
-    // }
-    // else {
-    //     [[BaiduMobStat defaultStat] logEvent:[command argumentAtIndex:0] eventLabel:[command argumentAtIndex:1] attributes:[command argumentAtIndex:2]];
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"success!"];
-    // }
+    FlutterViewController *flutterViewController = [[FlutterViewController alloc] initWithEngine:self.flutterEngine nibName:nil bundle:nil];
     
-    // [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    FlutterMethodChannel *flutterChannel = [FlutterMethodChannel
+                                           methodChannelWithName:@"app.channel.shared.cordova.data"
+                                           binaryMessenger:flutterViewController
+                                          ];
+        
+    [flutterChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        CFStringRef uuidStr = CFUUIDCreateString(NULL, uuid);
+        NSString *uuidMethod = [[NSString alloc] initWithFormat:@"%@#%@#",call.method,uuidStr];
+
+        NSString *script=nil;
+        if(nil != call.arguments){
+            NSDictionary *paramsDict = call.arguments;
+            NSString *JSONString = [self DataTOjsonString:paramsDict];
+            script = [[NSString alloc] initWithFormat:@"window.bridgeFlutterInvoke('%@','%@',%@)",uuidStr,call.method,JSONString];
+        }else{
+            script = [[NSString alloc] initWithFormat:@"window.bridgeFlutterInvoke('%@','%@',%@)",uuidStr,call.method,nil];
+        }
+        
+        [self.methodDict setObject:result forKey:uuidMethod];
+        [self.webViewEngine evaluateJavaScript:script completionHandler:nil];
+    }];
+ 
+    [self.viewController presentViewController:flutterViewController animated:YES completion:nil];
+    
+    __weak CDVFlutter* weakSelf = self;
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
+        [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+    
 }
 
 -(void)invokeCallback:(CDVInvokedUrlCommand *)command {
-    // CDVPluginResult* result= nil;
-    // NSArray* args=command.arguments;
+     NSDictionary *jsonObjDict = [command.arguments objectAtIndex:0];
+     NSString *uuidMethod = [jsonObjDict objectForKey:@"uuid"];
+     NSDictionary *valueDict = [jsonObjDict objectForKey:@"result"];
+
+     __weak CDVFlutter* weakSelf = self;
+     [self.commandDelegate runInBackground:^{
+             
+           FlutterResult flutterResult = [self.methodDict objectForKey:uuidMethod];
+              
+           NSString *JSONString = [self DataTOjsonString:valueDict];
+           flutterResult(JSONString);
+           [self.methodDict removeObjectForKey:uuidMethod];
+         
+           CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
+           [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+     }];
     
-    // if (args.count != 3) {
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"please pass event, label and duration"];
-    // }
-    // else {
-    //     [[BaiduMobStat defaultStat] logEventWithDurationTime:[command argumentAtIndex:0] eventLabel:[command argumentAtIndex:1] durationTime:(unsigned long)[command argumentAtIndex:2 withDefault:0]];
-    //     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"success!"];
-    // }
-    
-    // [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    
+     CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
+     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
  
+-(NSString*)DataTOjsonString:(id)object
+{
+    NSString *jsonString = nil;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
+                                                       options:0 //NSJSONWritingPrettyPrinted
+                        //Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    if (! jsonData) {
+        NSLog(@"Got an error: %@", error);
+    } else {
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    return jsonString;
+}
 
  
 @end
