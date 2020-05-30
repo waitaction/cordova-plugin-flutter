@@ -38,8 +38,6 @@ cordova build ios
 
 > 编译过程会下载缺失的flutter framework，可能需要几分钟时间...
 
-> 安装成功后，自动创建`flutter_module`文件夹
-
 ## 在`cordova`调用`flutter`
 
 **flutter.init** `使用前初始化，尽可能早的初始化，且只初始一次`
@@ -69,6 +67,8 @@ flutter.open(function(){
 
 先在`cordova`定义方法
 
+`javascript`代码：
+
 ``` javascript
 window.bridgeFlutter.getDate = function (jsonObj, callback) {
     var format = jsonObj.format;
@@ -79,6 +79,8 @@ window.bridgeFlutter.getDate = function (jsonObj, callback) {
 ```
 
 然后在`flutter`调用
+
+`dart`代码：
 
 ``` dart
 import 'package:flutter_module/cordova.dart';
@@ -126,4 +128,4 @@ flutter.init(function () {
 
 感谢 `@zhangjianying` 大神编写的ios代码和ios构建脚本.
 
-目前仍有许多不足之处，由于工作繁忙，其它细节，你可以fork代码优化。
+目前仍有许多不足之处，由于工作繁忙，其它细节，你可以 [fork一份代码](https://github.com/waitaction/cordova-plugin-flutter) 进行优化。
