@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-flutter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "cordova-plugin-flutter",
   "cordova": {
     "id": "cordova-plugin-flutter"
