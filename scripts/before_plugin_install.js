@@ -35,6 +35,11 @@ function installFlutterModule() {
 
 
 function checkRequireEnvironment(callback) {
+    console.log("*** flutter ≥ 1.17.0 ***");
+    console.log("*** cordova ≥ 9.0.0 ***");
+    console.log("*** cordova-android ≥ 8.0.0 ***");
+    console.log("*** cordova-ios ≥ 5.0.0 ***");
+
     var process = require('child_process');
     process.exec('cordova --version',
         function (error, stdout, stderr) {
@@ -91,7 +96,7 @@ function checkRequireEnvironment(callback) {
                     console.log(stdout);
                     var flutterVersion = /Flutter \d/.exec(stdout)[0];
                     if (parseInt(flutterVersion.replace("Flutter ", "").sub(0, 1)) < 1) {
-                        console.error("\033[31m 不支持低于1.12.13版本的flutter \033[0m");
+                        console.error("\033[31m 不支持低于1.17.0版本的flutter \033[0m");
                     }
                 } catch (error) {
                     console.error("\033[31m 检测必须的环境失败 \033[0m");

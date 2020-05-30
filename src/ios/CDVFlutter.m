@@ -1,5 +1,5 @@
 #import "CDVFlutter.h"
-#import "GeneratedPluginRegistrant.h"
+//#import "GeneratedPluginRegistrant.h"
 #import <Flutter/Flutter.h>
 
 
@@ -17,7 +17,7 @@
     if(nil == weakSelf.flutterEngine){
                   weakSelf.flutterEngine =[[FlutterEngine alloc] initWithName:@"my flutter engine"];
                  [weakSelf.flutterEngine runWithEntrypoint:nil];
-                 [GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
+                 //[GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
     }
     
     if(nil == self.methodDict){

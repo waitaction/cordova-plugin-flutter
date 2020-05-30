@@ -1,15 +1,22 @@
 
 function iOSFlutterFrameworkBuild() {
-    var process = require('child_process');
+    var child_process = require('child_process');
     var fs = require('fs');
 
     if (fs.existsSync("flutter_module")) {
         console.info("\033[33m *** flutter build ios-framework *** \033[0m");
         console.log("编译过程可能需要几分钟的时间...");
-
-        process.execSync('cd flutter_module && flutter build ios-framework --output=ios-framework',{stdio:[0,1,2]});
-        copyiOSFlutterFramework('Release');
-        
+        child_process.execSync('cd flutter_module && flutter clean && flutter packages get && flutter build ios-framework --output=ios-framework', { stdio: [0, 1, 2] });
+        if (process.argv != null && process.argv.length > 0) {
+            var result = process.argv.find(m => m == "--release");
+            if (result != null) {
+                copyiOSFlutterFramework('Release');
+            } else {
+                copyiOSFlutterFramework('Debug');
+            }
+        } else {
+            copyiOSFlutterFramework('Debug');
+        }
     }
 
     function copyiOSFlutterFramework(version) {
@@ -21,7 +28,7 @@ function iOSFlutterFrameworkBuild() {
             var name = /<name>.*?<\/name>/.exec(configXml)[0];
             name = name.replace("<name>", "").replace("</name>", "");
             var targetPath = "platforms/ios/" + name + "/Plugins/cordova-plugin-flutter";
-            var path = "flutter_module/ios-framework/"+version;
+            var path = "flutter_module/ios-framework/" + version;
             console.info("\033[33m *** name *** \033[0m");
             copy(path, targetPath);
         } catch (error) {
