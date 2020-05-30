@@ -11,7 +11,7 @@
 | flutter         | ≥ 1.17.0 |
 
 > flutter代码与cordova代码在同个cordova项目里，`flutter`代码所在的文件夹`flutter_module`
-> 调试flutter请使用 `vs code` 的调试器 `Flutter: Attach to Device`，调试`flutter`相关方法参考`flutter`官网
+
 
 ## 安装
 
@@ -86,6 +86,26 @@ import 'package:flutter_module/cordova.dart';
 var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM月dd日"});
 ```
 
+## 示例代码
+
+``` js
+flutter.init(function () {
+    window.bridgeFlutter.getDate = function (jsonObj, callback) {
+        var format = jsonObj.format;
+        callback({   date: "日期格式是：" + format });
+        alert("日期格式是：" + format)
+    }
+    console.log("初始化成功");
+    flutter.open(function () {
+        console.log("打开flutter成功");
+    }, function (err) {
+
+    })
+}, function (err) {
+
+})
+```
+
 ## 编译
 
 编译ios时，需要在虚拟机的调试请使用`cordova build ios`编译
@@ -94,6 +114,13 @@ var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM
 
 > 如果使用`cordova build ios --release`命令编译，使用xCode运行在虚拟机会提示`Building for iOS Simulator, but the embedded framework 'Flutter.framework' was built for iOS`的错误
 
+## 调试
+
+请使用 `visual studio code`，安装`flutter`扩展，打开`cordova项目路径/flutter_module`目录，使用`visual studio code`调试工具创建`Flutter: Attach to Device`，运行app后附加调试。
+
+![截图1](screenshot/1590851583248.jpg "截图1")
+
+![截图2](screenshot/1590851885254.jpg "截图2")
 
 ## 其它
 
