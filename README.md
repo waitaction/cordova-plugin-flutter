@@ -120,9 +120,9 @@ flutter.init(function () {
 
 使用 `visual studio code`，安装`flutter`扩展，打开`cordova项目路径/flutter_module`目录，使用`visual studio code`调试工具创建`Flutter: Attach to Device`，运行app后附加调试。
 
-![截图1](/screenshot/1590851583248.jpg "截图1")
+![截图1](/screenshot/1590851583248.jpg "因网络原因，截图'/screenshot/1590851583248.jpg'无法加载")
 
-![截图2](/screenshot/1590851885254.jpg "截图2")
+![截图2](/screenshot/1590851885254.jpg "因网络原因，截图'/screenshot/1590851885254.jpg'无法加载")
 
 ## 其它
 
