@@ -10,8 +10,6 @@
 | cordova-ios     | ≥ 5.0.0  |
 | flutter         | ≥ 1.17.0 |
 
-> flutter代码与cordova代码在同个cordova项目里，`flutter`代码所在的文件夹`flutter_module`
-
 
 ## 安装
 
@@ -40,7 +38,9 @@ cordova build ios
 
 > 编译过程会下载缺失的flutter framework，可能需要几分钟时间...
 
-## 调用flutter
+> 安装成功后，自动创建`flutter_module`文件夹
+
+## 在`cordova`调用`flutter`
 
 **flutter.init** `使用前初始化，尽可能早的初始化，且只初始一次`
 
@@ -112,15 +112,15 @@ flutter.init(function () {
 
 开发完成后，需要上架到app store，请使用`cordova build ios --release` 编译
 
-> 如果使用`cordova build ios --release`命令编译，使用xCode运行在虚拟机会提示`Building for iOS Simulator, but the embedded framework 'Flutter.framework' was built for iOS`的错误
+> 如果使用`cordova build ios --release`命令编译，使用xcode运行在虚拟机会提示`Building for iOS Simulator, but the embedded framework 'Flutter.framework' was built for iOS`的错误
 
-## 调试
+## 如何调试`flutter`代码
 
-请使用 `visual studio code`，安装`flutter`扩展，打开`cordova项目路径/flutter_module`目录，使用`visual studio code`调试工具创建`Flutter: Attach to Device`，运行app后附加调试。
+使用 `visual studio code`，安装`flutter`扩展，打开`cordova项目路径/flutter_module`目录，使用`visual studio code`调试工具创建`Flutter: Attach to Device`，运行app后附加调试。
 
-![截图1](screenshot/1590851583248.jpg "截图1")
+![截图1](/screenshot/1590851583248.jpg "截图1")
 
-![截图2](screenshot/1590851885254.jpg "截图2")
+![截图2](/screenshot/1590851885254.jpg "截图2")
 
 ## 其它
 
