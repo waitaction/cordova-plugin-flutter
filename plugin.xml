@@ -21,12 +21,16 @@
         </config-file>
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
             <activity android:theme="@android:style/Theme.NoTitleBar" android:name="io.flutter.embedding.android.FlutterActivity" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" />
+            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:name="com.flutter.android.CordovaFlutterActivity" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="adjustResize" />
         </config-file>
         <config-file parent="/manifest" target="AndroidManifest.xml">
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
         </config-file>
+
         <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android"/>
+        <source-file src="src/android/com/flutter/android/CordovaFlutterActivity.java" target-dir="src/com/flutter/android"/>
+        
         <framework src="src/android/compile.gradle" custom="true" type="gradleReference"/>
 
         <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js"/>
@@ -40,10 +44,15 @@
                 <param name="ios-package" value="CDVFlutter"/>
             </feature>
         </config-file>
+
         <header-file src="src/ios/CDVFlutter.h"/>
         <source-file src="src/ios/CDVFlutter.m"/>
+        <header-file src="src/ios/GeneratedPluginRegistrant.h"/>
+        <source-file src="src/ios/GeneratedPluginRegistrant.m"/>
+
         <framework src="src/ios/lib/App.framework" custom="true" embed="true" />
         <framework src="src/ios/lib/Flutter.framework" custom="true" embed="true"/>
+
         <hook type="before_plugin_install" src="scripts/ios/before_plugin_install.js"/>
         <hook type="before_plugin_uninstall" src="scripts/ios/before_plugin_uninstall.js"/>
         <hook type="after_plugin_add" src="scripts/ios/after_plugin_add.js" />

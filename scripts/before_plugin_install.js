@@ -6,14 +6,21 @@ function installFlutterModule() {
         console.info("\033[33m *** 安装Flutter模块 *** \033[0m")
         var exportPath = "";
         //var exportPath = "export PUB_HOSTED_URL=https://pub.flutter-io.cn && export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn && ";
-        var result = process.execSync(exportPath + 'flutter create -t module flutter_module');
-        var error = result[0];
-        var stdout = result[1];
-        var stderr = result[2];
-        if (error !== null) {
-            console.log('exec error: ' + error);
+        
+        try{
+            var result = process.execSync(exportPath + 'flutter create -t module flutter_module');
+            var error = result[0];
+            var stdout = result[1];
+            var stderr = result[2];
+            //execSync 如果子进程结束的时候返回值不为0 则会提示错误信息
+            if (error !== null && error!=67) {
+                console.error('exec error: ' + error);
+            }
+            console.log(stdout);
+        }catch(e){
+            console.error(e)
         }
-        console.log(stdout);
+      
         copyFlutterCordovaFile();
     }
 
@@ -28,7 +35,7 @@ function installFlutterModule() {
             }
         } catch (error) {
             console.info("\033[33m 报错： \033[0m");
-            console.log(error);
+            console.error(error);
         }
     }
 }

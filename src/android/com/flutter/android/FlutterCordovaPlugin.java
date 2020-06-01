@@ -39,9 +39,10 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 public class FlutterCordovaPlugin extends CordovaPlugin {
 
     public static FlutterCordovaPlugin instance;
-    public FlutterEngine flutterEngine;
     public String engineId;
-    public Map<String, MethodChannel.Result> methodMap = new HashMap<String, MethodChannel.Result>();
+    public static Map<String, MethodChannel.Result> methodMap = new HashMap<String, MethodChannel.Result>();
+    public static  CordovaInterface _cordova;
+    public static CordovaWebView _webView;
 
     public FlutterCordovaPlugin() {
         FlutterCordovaPlugin.instance = this;
@@ -57,51 +58,15 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
         // 参考文档
         // https://flutter.dev/docs/development/add-to-app/android/add-flutter-screen
         if (action.equals("init")) {
+
+            _webView = this.webView;
+            _cordova = this.cordova;
             this.engineId = "d785461d";
             this.cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        // Instantiate a FlutterEngine.
-                        flutterEngine = new FlutterEngine(cordova.getContext());
-
-                        // Start executing Dart code to pre-warm the FlutterEngine.
-                        flutterEngine.getDartExecutor()
-                                .executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
-                        // Cache the FlutterEngine to be used by FlutterActivity.
-                        FlutterEngineCache.getInstance().put(engineId, flutterEngine);
-
-                        GeneratedPluginRegistrant.registerWith(flutterEngine);
-
-                        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(),
-                                "app.channel.shared.cordova.data")
-                                        .setMethodCallHandler(new MethodChannel.MethodCallHandler() {
-                                            @Override
-                                            public void onMethodCall(MethodCall call, MethodChannel.Result result) {
-                                                String uuid = UUID.randomUUID().toString();
-                                                String uuidMethod = call.method + "#" + uuid + "#";
-                                                methodMap.put(uuidMethod, result);
-                                                // 触发调用js
-                                                String js = "window.bridgeFlutterInvoke('%s','%s',%s)";
-                                                String script;
-                                                if (call.arguments != null) {
-                                                    HashMap<String, Object> argHashMap = (HashMap<String, Object>) call.arguments;
-                                                    JSONObject argJSONObject = new JSONObject(argHashMap);
-                                                    script = String.format(js, uuid, call.method,
-                                                            argJSONObject.toString());
-                                                } else {
-                                                    script = String.format(js, uuid, call.method, null);
-                                                }
-
-                                                cordova.getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        webView.loadUrl("javascript:" + script);
-                                                    }
-                                                });
-                                            }
-                                        });
-
+                        initSingeFlutterEngine();
                         cordova.getThreadPool().execute(new Runnable() {
                             @Override
                             public void run() {
@@ -123,10 +88,23 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
 
         if (action.equals("open")) {
             try {
-                this.cordova.getActivity().startActivity(
+                String routerName=null;
+                if(args.length()>0){
+                    routerName = args.getString(0);
+                }
+
+                if(TextUtils.isEmpty(routerName)){
+                    this.cordova.getActivity().startActivity(
                             FlutterActivity
                                     .withCachedEngine(this.engineId)
                                     .build(this.cordova.getActivity()));
+                }else{
+                    Intent intent = CordovaFlutterActivity
+                            .withNewEngine(CordovaFlutterActivity.class)
+                            .initialRoute(routerName)
+                            .build(this.cordova.getActivity());
+                    this.cordova.getActivity().startActivity(intent);
+                }
 
                 callbackContext.success();
             } catch (Exception ex) {
@@ -159,6 +137,48 @@ public class FlutterCordovaPlugin extends CordovaPlugin {
         }
 
         return false;
+    }
+
+    private FlutterEngine initSingeFlutterEngine() {
+        FlutterEngine  flutterEngine = new FlutterEngine(cordova.getContext());
+        flutterEngine.getDartExecutor()
+                .executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
+
+        FlutterEngineCache instance = FlutterEngineCache.getInstance();
+        instance.remove(engineId);
+        FlutterEngineCache.getInstance().put(engineId, flutterEngine);
+
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(),
+                "app.channel.shared.cordova.data")
+                        .setMethodCallHandler(new MethodChannel.MethodCallHandler() {
+                            @Override
+                            public void onMethodCall(MethodCall call, MethodChannel.Result result) {
+                                String uuid = UUID.randomUUID().toString();
+                                String uuidMethod = call.method + "#" + uuid + "#";
+                                methodMap.put(uuidMethod, result);
+                                // 触发调用js
+                                String js = "window.bridgeFlutterInvoke('%s','%s',%s)";
+                                String script;
+                                if (call.arguments != null) {
+                                    HashMap<String, Object> argHashMap = (HashMap<String, Object>) call.arguments;
+                                    JSONObject argJSONObject = new JSONObject(argHashMap);
+                                    script = String.format(js, uuid, call.method,
+                                            argJSONObject.toString());
+                                } else {
+                                    script = String.format(js, uuid, call.method, null);
+                                }
+
+                                cordova.getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        webView.loadUrl("javascript:" + script);
+                                    }
+                                });
+                            }
+                        });
+
+        return flutterEngine;
     }
 
     public void JsonObject2HashMap(JSONObject jo, List<Map<?, ?>> rstList) {
