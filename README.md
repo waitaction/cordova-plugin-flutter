@@ -56,11 +56,39 @@ flutter.init(function(){
 
 ``` javascript
 //请在flutter.init方法之后调用
-flutter.open(function(){
+flutter.open(
+undefined,
+function(){
     console.log("打开flutter成功");
 },function(err){
-
 })
+
+flutter.open(
+'/HomePage' , //flutter路由名称    
+function(){
+    console.log("打开flutter成功");
+},function(err){
+})
+```
+
+对应flutter路由名称
+```flutter
+ @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        platform: TargetPlatform.iOS,
+      ),
+      routes: {
+        '/HomePage': (BuildContext context) => new HomePage(),
+        '/NextPage': (BuildContext context) => new NextPage(),
+      },
+      initialRoute: '/HomePage', //初始化路由为first页面
+      // onGenerateRoute: AppRouter.router.generator,
+    );
+  }
 ```
 
 ## `flutter`调用`cordova`的js方法

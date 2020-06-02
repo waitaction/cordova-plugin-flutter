@@ -5,9 +5,13 @@ Flutter.prototype.init = function (success, error) {
     exec(success, error, "CordovaFlutter", "init", []);
 }
 
-Flutter.prototype.open = function (success, error) {
-    exec(success, error, "CordovaFlutter", "open", []);
-}
+Flutter.prototype.open = function (routerName, success, error) {
+    var routerNameParams = [];
+    if (routerName) {
+      routerNameParams = [routerName];
+    }
+    exec(success, error, 'CordovaFlutter', 'open', routerNameParams);
+};
 
 Flutter.prototype.invokeCallback = function (callbackData, uuidMethod, success, error) {
     var result = {

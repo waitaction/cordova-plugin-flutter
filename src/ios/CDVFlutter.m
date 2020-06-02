@@ -1,5 +1,5 @@
 #import "CDVFlutter.h"
-//#import "GeneratedPluginRegistrant.h"
+#import "GeneratedPluginRegistrant.h"
 #import <Flutter/Flutter.h>
 
 
@@ -17,7 +17,7 @@
     if(nil == weakSelf.flutterEngine){
                   weakSelf.flutterEngine =[[FlutterEngine alloc] initWithName:@"my flutter engine"];
                  [weakSelf.flutterEngine runWithEntrypoint:nil];
-                 //[GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
+                 [GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
     }
     
     if(nil == self.methodDict){
@@ -33,8 +33,19 @@
 
 -(void)open:(CDVInvokedUrlCommand*)command {
     
-    FlutterViewController *flutterViewController = [[FlutterViewController alloc] initWithEngine:self.flutterEngine nibName:nil bundle:nil];
+    NSInteger dictCount = [command.arguments count];
+    FlutterViewController *flutterViewController;
     
+    //如果js端 传入路由参数
+    if(dictCount>0){
+        NSString *routerName = [command.arguments objectAtIndex:0];
+            flutterViewController = [[FlutterViewController alloc] init];
+        [flutterViewController setInitialRoute:routerName];
+        [GeneratedPluginRegistrant registerWithRegistry:flutterViewController];
+    }else{
+        flutterViewController = [[FlutterViewController alloc] initWithEngine:self.flutterEngine nibName:nil bundle:nil];
+    }
+        
     FlutterMethodChannel *flutterChannel = [FlutterMethodChannel
                                            methodChannelWithName:@"app.channel.shared.cordova.data"
                                            binaryMessenger:flutterViewController
