@@ -62,14 +62,23 @@ function writeImplementationToBuilderJsFile() {
 function updateFlutterGradleToBuilderJsFile() {
     //先匹配到文本
     var data = readProjectBuilderJsFile();
-    var txt = data.match(/var.*?\-all\.zip';/)[0];
-    data = data.replace(txt, `
+    var txt = null;
+    var result = data.match(/var.*?\-all\.zip';/);
+    if (result != null && result.length > 0) {
+        txt = result[0];
+    } else {
+        txt = data.match(/const.*?\-all\.zip';/)[0];
+    }
+
+    if (txt != null) {
+        data = data.replace(txt, `
         ${txt};
         //#CORDOVA-PLUGIN-FLUTTER#START
         distributionUrl = process.env['CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL'] || 'https\\\\://services.gradle.org/distributions/gradle-5.6.4-all.zip';
         //#CORDOVA-PLUGIN-FLUTTER#END
     `);
-    writeProjectBuilderJsFile(data);
+        writeProjectBuilderJsFile(data);
+    }
 }
 function updateToGradlePropertiesJsFile() {
     var data = fs.readFileSync(gradleProperties, 'utf8');

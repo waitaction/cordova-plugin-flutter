@@ -6,21 +6,21 @@ function installFlutterModule() {
         console.info("\033[33m *** 安装Flutter模块 *** \033[0m")
         var exportPath = "";
         //var exportPath = "export PUB_HOSTED_URL=https://pub.flutter-io.cn && export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn && ";
-        
-        try{
+
+        try {
             var result = process.execSync(exportPath + 'flutter create -t module flutter_module');
             var error = result[0];
             var stdout = result[1];
             var stderr = result[2];
             //execSync 如果子进程结束的时候返回值不为0 则会提示错误信息
-            if (error !== null && error!=67) {
+            if (error !== null && error != 67) {
                 console.error('exec error: ' + error);
             }
             console.log(stdout);
-        }catch(e){
+        } catch (e) {
             console.error(e)
         }
-      
+
         copyFlutterCordovaFile();
     }
 
@@ -52,8 +52,8 @@ function checkRequireEnvironment(callback) {
         function (error, stdout, stderr) {
             try {
                 console.log(stdout);
-                var cordovaVersion = /\d\.\d\.\d/.exec(stdout)[0]
-                if (parseInt(cordovaVersion.substr(0, 1)) < 9) {
+                var cordovaVersion = /\d+\.\d+\.\d+/.exec(stdout)[0];
+                if (parseInt(cordovaVersion.substr(0, cordovaVersion.indexOf("."))) < 9) {
                     console.error("\033[31m 不支持低于9.0.0版本的cordova \033[0m");
                 }
             } catch (error) {
@@ -119,7 +119,7 @@ function checkRequireEnvironment(callback) {
 
 
 }
-console.log("*** 检测必需的环境 ***");
+console.log("\033[33m *** 检测必需的环境 ***\033[0m");
 checkRequireEnvironment(function () {
     installFlutterModule();
 });
