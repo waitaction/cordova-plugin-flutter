@@ -3,12 +3,12 @@
 
 让你的cordova应用能与flutter进行混合开发
 
-| 开发环境        | 版本     |
-| --------------- | -------- |
-| cordova         | ≥ 9.0.0  |
-| cordova-android | ≥ 8.0.0  |
-| cordova-ios     | ≥ 5.0.0  |
-| flutter         | ≥ 1.17.0 |
+| 开发环境        | 版本                |
+| --------------- | ------------------- |
+| cordova         | ≥ 9.0.0             |
+| cordova-android | ≥ 8.0.0 and < 9.0.0 |
+| cordova-ios     | ≥ 5.0.0             |
+| flutter         | ≥ 1.17.0            |
 
 
 ## 安装
