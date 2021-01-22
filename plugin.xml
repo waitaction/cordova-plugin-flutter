@@ -32,7 +32,7 @@
 
         <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android" />
         <source-file src="src/android/com/flutter/android/CordovaFlutterActivity.java" target-dir="src/com/flutter/android" />
-        <source-file src="src/android/android/support/v4/content/FileProvider.java" target-dir="src/com/flutter/android" />
+        <source-file src="src/android/android/support/v4/content/FileProvider.java" target-dir="src/android/support/v4/content" />
         <framework src="src/android/compile.gradle" custom="true" type="gradleReference" />
 
         <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js" />
