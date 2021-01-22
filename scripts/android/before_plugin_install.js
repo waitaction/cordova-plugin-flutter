@@ -45,13 +45,12 @@ function writeImplementationToBuilderJsFile() {
     var data = readProjectBuilderJsFile();
     data = data.replace(txt, `
         //#CORDOVA-PLUGIN-FLUTTER#START
-        depsList += '    implementation ' + "'androidx.annotation:annotation:1.0.0'" + '\\n';
+        depsList += '    implementation ' + "'androidx.annotation:annotation:1.1.0'" + '\\n';
         depsList += '    implementation ' + "project(':flutter')" + '\\n';
         //#CORDOVA-PLUGIN-FLUTTER#END
         buildGradle = buildGradle.replace(/(SUB-PROJECT DEPENDENCIES START)[\\s\\S]*(\\/\\/ SUB-PROJECT DEPENDENCIES END)/, '$1\\n' + depsList + '    $2');
     `);
     writeProjectBuilderJsFile(data);
-
 }
 
 
@@ -71,6 +70,7 @@ function updateFlutterGradleToBuilderJsFile() {
     }
 
     if (txt != null) {
+        txt = txt.replace("const ", "var ");
         data = data.replace(txt, `
         ${txt};
         //#CORDOVA-PLUGIN-FLUTTER#START
@@ -114,8 +114,8 @@ writeFlutterSettingsGradleToBuilderJsFile();
 writeImplementationToBuilderJsFile();
 updateFlutterGradleToBuilderJsFile();
 
-console.log("*** 注入 platforms/android/gradle.properties 与flutter相关的设置 ***");
-updateToGradlePropertiesJsFile();
+// console.log("*** 注入 platforms/android/gradle.properties 与flutter相关的设置 ***");
+// updateToGradlePropertiesJsFile();
 
 console.log("*** 注入 platforms/android/build.gradle 与flutter相关的设置 ***");
 updateToBuildGradle();

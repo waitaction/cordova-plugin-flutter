@@ -3,14 +3,16 @@
 
 让你的cordova应用能与flutter进行混合开发
 
-| 开发环境        | 版本                |
-| --------------- | ------------------- |
-| cordova         | ≥ 9.0.0             |
-| cordova-android | ≥ 8.0.0 and < 9.0.0 |
-| cordova-ios     | ≥ 5.0.0             |
-| flutter         | ≥ 1.17.0            |
+| 开发环境        | 版本     |
+| --------------- | -------- |
+| cordova         | ≥ 10.0.0 |
+| cordova-android | ≥ 9.0.0  |
+| cordova-ios     | ≥ 5.0.0  |
+| flutter         | ≥ 1.17.0 |
 
-
+> 有开发者调侃说：“什么？cordova还可以flutter混合开发？这插件只有原作者敢用”
+> 为此，我写了一个示例，可以参考此示例进行cordova与flutter的混合开发 
+> 示例代码：`https://github.com/waitaction/cordovaFlutterDemo`
 ## 安装
 
 安装cordova-plugin-flutter插件
@@ -72,7 +74,7 @@ function(){
 ```
 
 对应flutter路由名称
-```flutter
+``` dart
  @override
   Widget build(BuildContext context) {
     return MaterialApp(

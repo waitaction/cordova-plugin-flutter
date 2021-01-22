@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
+// import androidx.annotation.NonNull;
+// import androidx.annotation.Nullable;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;

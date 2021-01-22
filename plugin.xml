@@ -1,22 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-flutter" version="1.0.3" 
-    xmlns="http://apache.org/cordova/ns/plugins/1.0" 
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-flutter" version="1.0.4" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-plugin-flutter</name>
     <description>支持在cordova项目里flutter混合开发，支持cordova-android与cordova-ios平台</description>
     <author>350561378@qq.com</author>
     <license>Apache License Version 2.0</license>
     <keywords>cordova,cordova-plugin-flutter</keywords>
     <engines>
-        <engine name="cordova-android" version="&gt;=8.0.0"/>
+        <engine name="cordova-android" version="&gt;=9.0.0" />
     </engines>
     <js-module name="CordovaFlutter" src="www/cordova-plugin-flutter.js">
-        <clobbers target="flutter"/>
+        <clobbers target="flutter" />
     </js-module>
+
     <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <preference name="AndroidXEnabled" value="true" />
+        </config-file>
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="CordovaFlutter">
-                <param name="android-package" value="com.flutter.android.FlutterCordovaPlugin"/>
+                <param name="android-package" value="com.flutter.android.FlutterCordovaPlugin" />
             </feature>
         </config-file>
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
@@ -24,39 +26,40 @@
             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:name="com.flutter.android.CordovaFlutterActivity" android:theme="@android:style/Theme.NoTitleBar" android:windowSoftInputMode="adjustResize" />
         </config-file>
         <config-file parent="/manifest" target="AndroidManifest.xml">
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
 
-        <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android"/>
-        <source-file src="src/android/com/flutter/android/CordovaFlutterActivity.java" target-dir="src/com/flutter/android"/>
-        
-        <framework src="src/android/compile.gradle" custom="true" type="gradleReference"/>
+        <source-file src="src/android/com/flutter/android/FlutterCordovaPlugin.java" target-dir="src/com/flutter/android" />
+        <source-file src="src/android/com/flutter/android/CordovaFlutterActivity.java" target-dir="src/com/flutter/android" />
+        <source-file src="src/android/android/support/v4/content/FileProvider.java" target-dir="src/com/flutter/android" />
+        <framework src="src/android/compile.gradle" custom="true" type="gradleReference" />
 
-        <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js"/>
-        <hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js"/>
+        <hook type="before_plugin_install" src="scripts/android/before_plugin_install.js" />
+        <hook type="before_plugin_uninstall" src="scripts/android/before_plugin_uninstall.js" />
         <hook type="after_plugin_add" src="scripts/android/after_plugin_add.js" />
+
     </platform>
 
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="CordovaFlutter">
-                <param name="ios-package" value="CDVFlutter"/>
+                <param name="ios-package" value="CDVFlutter" />
             </feature>
         </config-file>
 
-        <header-file src="src/ios/CDVFlutter.h"/>
-        <source-file src="src/ios/CDVFlutter.m"/>
-        <header-file src="src/ios/GeneratedPluginRegistrant.h"/>
-        <source-file src="src/ios/GeneratedPluginRegistrant.m"/>
+        <header-file src="src/ios/CDVFlutter.h" />
+        <source-file src="src/ios/CDVFlutter.m" />
+        <header-file src="src/ios/GeneratedPluginRegistrant.h" />
+        <source-file src="src/ios/GeneratedPluginRegistrant.m" />
 
         <framework src="src/ios/lib/App.framework" custom="true" embed="true" />
-        <framework src="src/ios/lib/Flutter.framework" custom="true" embed="true"/>
+        <framework src="src/ios/lib/Flutter.framework" custom="true" embed="true" />
 
-        <hook type="before_plugin_install" src="scripts/ios/before_plugin_install.js"/>
-        <hook type="before_plugin_uninstall" src="scripts/ios/before_plugin_uninstall.js"/>
+        <hook type="before_plugin_install" src="scripts/ios/before_plugin_install.js" />
+        <hook type="before_plugin_uninstall" src="scripts/ios/before_plugin_uninstall.js" />
         <hook type="after_plugin_add" src="scripts/ios/after_plugin_add.js" />
         <hook type="before_prepare" src="scripts/ios/before_prepare.js" />
     </platform>
-    <hook type="before_plugin_install" src="scripts/before_plugin_install.js"/>
+    <hook type="before_plugin_install" src="scripts/before_plugin_install.js" />
 </plugin>
