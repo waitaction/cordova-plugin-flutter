@@ -10,9 +10,7 @@
 | cordova-ios     | ≥ 5.0.0  |
 | flutter         | ≥ 1.17.0 |
 
-> 有开发者调侃说：“什么？cordova还可以flutter混合开发？这插件只有原作者敢用”
-> 为此，我写了一个示例，可以参考此示例进行cordova与flutter的混合开发 
-> 示例代码：`https://github.com/waitaction/cordovaFlutterDemo`
+示例代码：`https://github.com/waitaction/cordovaFlutterDemo`
 ## 安装
 
 安装cordova-plugin-flutter插件
