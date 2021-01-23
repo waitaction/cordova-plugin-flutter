@@ -1,5 +1,6 @@
-
 # cordova应用与flutter混合开发
+
+**重构中，目前iOS版本无法使用**
 
 让你的cordova应用能与flutter进行混合开发
 
@@ -40,13 +41,13 @@ cordova build ios
 
 ## 在`cordova`调用`flutter`
 
-**flutter.init** `使用前初始化，尽可能早的初始化，且只初始一次`
+**flutter.init** `使用前初始化，尽可能早的初始化，在deviceready之后，且只初始一次`
 
 ``` javascript
 flutter.init(function(){
     console.log("初始化成功");
 },function(err){
-
+    console.log("初始化失败");
 })
 ```
 
@@ -57,21 +58,28 @@ flutter.init(function(){
 ``` javascript
 //请在flutter.init方法之后调用
 flutter.open(
-undefined,
-function(){
-    console.log("打开flutter成功");
-},function(err){
-})
+    undefined,
+    function (result) {
+        console.log("打开flutter成功");
+        console.log(result);
+    }, function (err) {
+        console.log("打开flutter失败");
+    }
+);
 
 flutter.open(
-'/HomePage' , //flutter路由名称    
-function(){
-    console.log("打开flutter成功");
-},function(err){
-})
+    '/HomePage', //flutter路由名称    
+    function (result) {
+        console.log("打开flutter成功");
+    },
+    function (err) {
+        console.log("打开flutter失败");
+    }
+);
 ```
 
 对应flutter路由名称
+
 ``` dart
  @override
   Widget build(BuildContext context) {
@@ -91,49 +99,33 @@ function(){
   }
 ```
 
-## `flutter`调用`cordova`的js方法
+## 在`flutter`返回结果给`cordova`的
 
-先在`cordova`定义方法
-
-`javascript`代码：
-
-``` javascript
-window.bridgeFlutter.getDate = function (jsonObj, callback) {
-    var format = jsonObj.format;
-    callback({
-        date: "日期格式是：" + format
-    });
-}
-```
-
-然后在`flutter`调用
+在`flutter`调用
 
 `dart`代码：
 
 ``` dart
 import 'package:flutter_module/cordova.dart';
 //在需要的地方调用
-var result = await CordovaPlatform.invokeMethod("getDate", {"format": "yyyy年MM月dd日"});
+await CordovaPlatform.finish({"format": "yyyy年MM月dd日"});
 ```
 
 ## 示例代码
 
 ``` js
 flutter.init(function () {
-    window.bridgeFlutter.getDate = function (jsonObj, callback) {
-        var format = jsonObj.format;
-        callback({   date: "日期格式是：" + format });
-        alert("日期格式是：" + format)
-    }
     console.log("初始化成功");
-    flutter.open(function () {
+    flutter.open(null,function (result) {
         console.log("打开flutter成功");
+        //result 是flutter返回的结果，此处代码会输出 {"format":"yyyy年MM月dd日"}
+        console.log("result")
     }, function (err) {
-
+        console.log(err);
     })
 }, function (err) {
 
-})
+});
 ```
 
 ## 编译
