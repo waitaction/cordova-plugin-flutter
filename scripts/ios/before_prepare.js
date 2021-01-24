@@ -6,7 +6,7 @@ function iOSFlutterFrameworkBuild() {
     if (fs.existsSync("flutter_module")) {
         console.info("\033[33m *** flutter build ios-framework *** \033[0m");
         console.log("编译过程可能需要几分钟的时间...");
-        child_process.execSync('cd flutter_module && flutter clean && flutter packages get && flutter build ios-framework --output=ios-framework', { stdio: [0, 1, 2] });
+        child_process.execSync('cd flutter_module && flutter clean && flutter packages get && flutter build ios-framework --cocoapods --xcframework --no-universal --output=ios-framework', { stdio: [0, 1, 2] });
         if (process.argv != null && process.argv.length > 0) {
             var result = process.argv.find(m => m == "--release");
             if (result != null) {
@@ -21,7 +21,7 @@ function iOSFlutterFrameworkBuild() {
 
     function copyiOSFlutterFramework(version) {
         try {
-            console.info("\033[33m *** copyiOSFlutterFramework *** \033[0m");
+            console.info("\033[33m *** copy iOS FlutterFramework *** \033[0m");
             var fs = require('fs');
             var configXmlPath = "config.xml";
             var configXml = fs.readFileSync(configXmlPath);

@@ -9,7 +9,7 @@
 | cordova         | ≥ 10.0.0 |
 | cordova-android | ≥ 9.0.0  |
 | cordova-ios     | ≥ 5.0.0  |
-| flutter         | ≥ 1.17.0 |
+| flutter         | ≥ 1.22.0 |
 
 示例代码：`https://github.com/waitaction/cordovaFlutterDemo`
 ## 安装

@@ -43,8 +43,8 @@ function installFlutterModule() {
 
 function checkRequireEnvironment(callback) {
     console.log("*** flutter ≥ 1.17.0 ***");
-    console.log("*** cordova ≥ 9.0.0 ***");
-    console.log("*** cordova-android ≥ 8.0.0 ***");
+    console.log("*** cordova ≥ 10.0.0 ***");
+    console.log("*** cordova-android ≥ 9.0.0 ***");
     console.log("*** cordova-ios ≥ 5.0.0 ***");
 
     var process = require('child_process');
@@ -72,8 +72,8 @@ function checkRequireEnvironment(callback) {
                 console.log(stdout);
                 try {
                     var androidVersion = /android \d\.\d\.\d/.exec(stdout)[0];
-                    if (parseInt(androidVersion.replace("android ", "").sub(0, 1)) < 8) {
-                        console.error("\033[31m 不支持低于8.0.0版本的cordova-android \033[0m");
+                    if (parseInt(androidVersion.replace("android ", "").sub(0, 1)) < 9) {
+                        console.error("\033[31m 不支持低于10.0.0版本的cordova-android \033[0m");
                     }
                 } catch (error) {
                     console.error("***\033[31m 检测必须的环境失败，cordova-android没有安装，请使用命令cordova platform add android安装 *** \033[0m");
