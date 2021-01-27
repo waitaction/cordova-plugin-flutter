@@ -20,12 +20,7 @@
                  [GeneratedPluginRegistrant registerWithRegistry:weakSelf.flutterEngine];
     }
     
-    if(nil == self.methodDict){
-        self.methodDict = [NSMutableDictionary dictionary];
-    }
-    
     [self.commandDelegate runInBackground:^{
-        
         [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
     
@@ -35,8 +30,6 @@
     
     NSInteger dictCount = [command.arguments count];
     FlutterViewController *flutterViewController;
-    
-    //如果js端 传入路由参数
     if(dictCount>0){
         NSString *routerName = [command.arguments objectAtIndex:0];
             flutterViewController = [[FlutterViewController alloc] init];
@@ -45,61 +38,26 @@
     }else{
         flutterViewController = [[FlutterViewController alloc] initWithEngine:self.flutterEngine nibName:nil bundle:nil];
     }
-        
+    __weak CDVFlutter* weakSelf = self;
     FlutterMethodChannel *flutterChannel = [FlutterMethodChannel
-                                           methodChannelWithName:@"app.channel.shared.cordova.data"
-                                           binaryMessenger:flutterViewController
-                                          ];
+                                           methodChannelWithName:@"app.channel.shared.cordova.data" binaryMessenger:flutterViewController ];
         
     [flutterChannel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
-        CFUUIDRef uuid = CFUUIDCreate(NULL);
-        CFStringRef uuidStr = CFUUIDCreateString(NULL, uuid);
-        NSString *uuidMethod = [[NSString alloc] initWithFormat:@"%@#%@#",call.method,uuidStr];
-
-        NSString *script=nil;
-        if(nil != call.arguments){
-            NSDictionary *paramsDict = call.arguments;
-            NSString *JSONString = [self DataTOjsonString:paramsDict];
-            script = [[NSString alloc] initWithFormat:@"window.bridgeFlutterInvoke('%@','%@',%@)",uuidStr,call.method,JSONString];
-        }else{
-            script = [[NSString alloc] initWithFormat:@"window.bridgeFlutterInvoke('%@','%@',%@)",uuidStr,call.method,nil];
+        NSDictionary *paramsDict = call.arguments;
+        NSString *JSONString = [self DataTOjsonString:paramsDict];
+        if ([[call.arguments method] isEqual:@"finish"]){
+            [self.commandDelegate runInBackground:^{
+                CDVPluginResult* res= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:JSONString];
+                [weakSelf.commandDelegate sendPluginResult:res callbackId:command.callbackId ];
+            }];
+          
         }
-        
-        [self.methodDict setObject:result forKey:uuidMethod];
-        [self.webViewEngine evaluateJavaScript:script completionHandler:nil];
     }];
  
     [self.viewController presentViewController:flutterViewController animated:YES completion:nil];
-    
-    __weak CDVFlutter* weakSelf = self;
-    [self.commandDelegate runInBackground:^{
-        CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
-        [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
-    
 }
 
--(void)invokeCallback:(CDVInvokedUrlCommand *)command {
-     NSDictionary *jsonObjDict = [command.arguments objectAtIndex:0];
-     NSString *uuidMethod = [jsonObjDict objectForKey:@"uuid"];
-     NSDictionary *valueDict = [jsonObjDict objectForKey:@"result"];
 
-     __weak CDVFlutter* weakSelf = self;
-     [self.commandDelegate runInBackground:^{
-             
-           FlutterResult flutterResult = [self.methodDict objectForKey:uuidMethod];
-              
-           NSString *JSONString = [self DataTOjsonString:valueDict];
-           flutterResult(JSONString);
-           [self.methodDict removeObjectForKey:uuidMethod];
-         
-           CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
-           [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
-    
-     CDVPluginResult* result= [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:0];
-     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-}
 
  
 -(NSString*)DataTOjsonString:(id)object
