@@ -1,7 +1,5 @@
 # cordova应用与flutter混合开发
 
-**重构中，目前iOS版本无法使用**
-
 让你的cordova应用能与flutter进行混合开发
 
 | 开发环境        | 版本     |
@@ -9,7 +7,7 @@
 | cordova         | ≥ 10.0.0 |
 | cordova-android | ≥ 9.0.0  |
 | cordova-ios     | ≥ 5.0.0  |
-| flutter         | ≥ 1.22.0 |
+| flutter         | ≥ 1.17.0 |
 
 示例代码：`https://github.com/waitaction/cordovaFlutterDemo`
 ## 安装
