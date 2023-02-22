@@ -1,6 +1,6 @@
 
 var fs = require('fs');
-var projectBuilderJsPath = "platforms/android/cordova/lib/builders/ProjectBuilder.js"
+var projectBuilderJsPath = "node_modules/cordova-android/lib/builders/ProjectBuilder.js"
 var gradleProperties = "platforms/android/gradle.properties";
 var buildGradleFilePath = "platforms/android/build.gradle";
 /**
@@ -54,44 +54,6 @@ function writeImplementationToBuilderJsFile() {
 }
 
 
-
-/**
- * 更新 gradle
- */
-function updateFlutterGradleToBuilderJsFile() {
-    //先匹配到文本
-    var data = readProjectBuilderJsFile();
-    var txt = null;
-    var result = data.match(/var.*?\-all\.zip';/);
-    if (result != null && result.length > 0) {
-        txt = result[0];
-    } else {
-        txt = data.match(/const.*?\-all\.zip';/)[0];
-    }
-
-    if (txt != null) {
-        txt = txt.replace("const ", "var ");
-        data = data.replace(txt, `
-        ${txt};
-        //#CORDOVA-PLUGIN-FLUTTER#START
-        distributionUrl = process.env['CORDOVA_ANDROID_GRADLE_DISTRIBUTION_URL'] || 'https\\\\://services.gradle.org/distributions/gradle-5.6.4-all.zip';
-        //#CORDOVA-PLUGIN-FLUTTER#END
-    `);
-        writeProjectBuilderJsFile(data);
-    }
-}
-function updateToGradlePropertiesJsFile() {
-    var data = fs.readFileSync(gradleProperties, 'utf8');
-    data += `
-
-#CORDOVA-PLUGIN-FLUTTER#START
-android.useAndroidX=true
-android.enableJetifier=true
-#CORDOVA-PLUGIN-FLUTTER#END
-`;
-    fs.writeFileSync(gradleProperties, data);
-}
-
 function updateToBuildGradle() {
     var data = fs.readFileSync(buildGradleFilePath, 'utf8');
     data = data.replace(
@@ -112,10 +74,9 @@ function updateToBuildGradle() {
 console.log("*** 注入 platforms/android/cordova/lib/builders/ProjectBuilder.js 与flutter相关的脚本 ***");
 writeFlutterSettingsGradleToBuilderJsFile();
 writeImplementationToBuilderJsFile();
-updateFlutterGradleToBuilderJsFile();
 
 // console.log("*** 注入 platforms/android/gradle.properties 与flutter相关的设置 ***");
-// updateToGradlePropertiesJsFile();
+
 
 console.log("*** 注入 platforms/android/build.gradle 与flutter相关的设置 ***");
 updateToBuildGradle();

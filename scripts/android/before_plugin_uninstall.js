@@ -1,5 +1,5 @@
 var fs = require('fs');
-var projectBuilderJsPath = "platforms/android/cordova/lib/builders/ProjectBuilder.js"
+var projectBuilderJsPath = "node_modules/cordova-android/lib/builders/ProjectBuilder.js"
 var gradleProperties = "platforms/android/gradle.properties";
 
 function removeFromGradlePropertiesJsFile() {

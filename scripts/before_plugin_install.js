@@ -70,27 +70,27 @@ function checkRequireEnvironment(callback) {
         process.exec('cordova platform',
             function (error, stdout, stderr) {
                 console.log(stdout);
-                try {
-                    var androidVersion = /android \d\.\d\.\d/.exec(stdout)[0];
-                    if (parseInt(androidVersion.replace("android ", "").sub(0, 1)) < 9) {
-                        console.error("\033[31m 不支持低于10.0.0版本的cordova-android \033[0m");
-                    }
-                } catch (error) {
-                    console.error("***\033[31m 检测必须的环境失败，cordova-android没有安装，请使用命令cordova platform add android安装 *** \033[0m");
+                // try {
+                //     var androidVersion = /android \d\.\d\.\d/.exec(stdout)[0];
+                //     if (parseInt(androidVersion.replace("android ", "").sub(0, 1)) < 9) {
+                //         console.error("\033[31m 不支持低于10.0.0版本的cordova-android \033[0m");
+                //     }
+                // } catch (error) {
+                //     console.error("***\033[31m 检测必须的环境失败，cordova-android没有安装，请使用命令cordova platform add android安装 *** \033[0m");
 
-                }
+                // }
 
-                try {
-                    var iosVersion = /ios \d\.\d\.\d/.exec(stdout)[0];
-                    if (parseInt(iosVersion.replace("ios ", "").sub(0, 1)) < 5) {
-                        console.error("\033[31m 不支持低于5.1.1版本的cordova-ios \033[0m");
-                    }
-                } catch (error) {
-                    console.error("***\033[31m 检测必须的环境失败，cordova-ios没有安装，请使用命令cordova platform add ios安装 *** \033[0m");
-                }
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
+                // try {
+                //     var iosVersion = /ios \d\.\d\.\d/.exec(stdout)[0];
+                //     if (parseInt(iosVersion.replace("ios ", "").sub(0, 1)) < 5) {
+                //         console.error("\033[31m 不支持低于5.1.1版本的cordova-ios \033[0m");
+                //     }
+                // } catch (error) {
+                //     console.error("***\033[31m 检测必须的环境失败，cordova-ios没有安装，请使用命令cordova platform add ios安装 *** \033[0m");
+                // }
+                // if (error !== null) {
+                //     console.log('exec error: ' + error);
+                // }
                 next2();
             }
         );
@@ -119,7 +119,7 @@ function checkRequireEnvironment(callback) {
 
 
 }
-console.log("\033[33m *** 检测必需的环境 ***\033[0m");
+console.log("\033[33m *** Detect required environment ***\033[0m");
 checkRequireEnvironment(function () {
     installFlutterModule();
 });
